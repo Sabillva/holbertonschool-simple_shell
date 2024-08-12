@@ -180,7 +180,7 @@ Contributions to this project are welcome. To contribute:
 
 ## Authors
 
-- Sabillva <<https://github.com/Sabillva>
+- Sabillva <https://github.com/Sabillva>
 - Sadatnazarli <https://github.com/sadatnazarli>
 
 ## License
