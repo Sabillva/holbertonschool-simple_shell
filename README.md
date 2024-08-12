@@ -150,15 +150,16 @@ int main(int ac, char **av, char **env)
 
 
 ## Files
-shell.c: Main source file for the shell implementation.
-pid.c: Example of using getpid() to retrieve the process ID.
-ppid.c: Example of using getppid() to retrieve the parent process ID.
-exec.c: Demonstrates the usage of execve.
-fork.c: Shows how to create child processes using fork.
-wait.c: Example of using wait to wait for child processes.
-stat.c: Demonstrates file status checking using stat.
-env-main.c: Prints the environment variables.
-prompt.c: Example of reading user input using getline.
+- shell.c: Main source file for the shell implementation.
+- pid.c: Example of using getpid() to retrieve the process ID.
+- ppid.c: Example of using getppid() to retrieve the parent process ID.
+- exec.c: Demonstrates the usage of execve.
+- fork.c: Shows how to create child processes using fork.
+- wait.c: Example of using wait to wait for child processes.
+- stat.c: Demonstrates file status checking using stat.
+- env-main.c: Prints the environment variables.
+- prompt.c: Example of reading user input using getline.
+
 ## Man Page
 Refer to man_1_simple_shell for detailed documentation on the simple_shell command.
 
