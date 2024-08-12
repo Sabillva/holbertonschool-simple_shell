@@ -180,8 +180,8 @@ Contributions to this project are welcome. To contribute:
 
 ## Authors
 
-- Sabillva <itifstudentsabina@gmail.com>
-- Sadatnazarli <sadatnazarli@gmail.com>
+- Sabillva <<https://github.com/Sabillva>
+- Sadatnazarli <https://github.com/sadatnazarli>
 
 ## License
 
