@@ -1,0 +1,55 @@
+.\" Manpage for simple_shell
+.\" Contact <https://github.com/sadatnazarli> <https://github.com/Sabillva> to correct errors or typos.
+.TH SIMPLE_SHELL 1 "August 2024" "1.0" "Simple Shell Manual"
+.SH NAME
+simple_shell \- a simple UNIX command line interpreter
+.SH SYNOPSIS
+.B simple_shell
+.SH DESCRIPTION
+The 
+.B simple_shell
+is a basic UNIX command line interpreter. It provides a prompt for the user to enter commands and executes them. 
+
+It supports the following features:
+.TP
+.B Interactive Mode
+Displays a prompt and waits for the user to enter a command. After executing the command, it displays the prompt again.
+.TP
+.B Non-Interactive Mode
+Reads commands from standard input (e.g., a pipe) and executes them.
+.SH COMMANDS
+The shell handles commands in the following way:
+.TP
+.B ls
+Lists directory contents.
+.TP
+.B /bin/ls
+Executes the /bin/ls command directly.
+.SH BUILT-INS
+.TP
+.B exit
+Exits the shell.
+.TP
+.B env
+Prints the current environment.
+.SH OPTIONS
+This shell does not support any additional options or arguments. Commands must be entered directly without arguments.
+.SH EXIT STATUS
+The shell exits with status code 0 if the command was successful, and 1 if an error occurred.
+.SH EXAMPLES
+.TP
+.B $ ./simple_shell
+Displays the shell prompt.
+.TP
+.B $ /bin/ls
+Lists the files in the current directory.
+.TP
+.B $ exit
+Exits the shell.
+.SH AUTHOR
+Written by <Sabillva> <sadatnazarli>.
+.SH REPORTING BUGS
+Report bugs to <https://github.com/Sabillva> <https://github.com/sadatnazarli>.
+.SH COPYRIGHT
+Copyright (C) 2024 <Sabina> <Sadat>. License: MIT.
+
