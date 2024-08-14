@@ -114,12 +114,14 @@ int main(void)
 {
     char *line = NULL;
     size_t len = 0;
+    ssize_t read_size;
     char *command_list[MAX_ARGS];
 
     while (1)
     {
         print_prompt();
-        if (getline(&line, &len, stdin) == -1)
+        read_size = getline(&line, &len, stdin);
+        if (read_size == -1)
         {
             if (feof(stdin))
             {
@@ -134,7 +136,12 @@ int main(void)
             }
         }
 
-        if (line[0] == '\n')
+        /* Remove trailing newline character */
+        if (line[read_size - 1] == '\n')
+            line[read_size - 1] = '\0';
+
+        /* Ignore empty input */
+        if (line[0] == '\0')
             continue;
 
         command_list[0] = line;
