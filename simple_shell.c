@@ -5,7 +5,7 @@
  */
 void print_prompt(void)
 {
-    printf("#cisfun$ ");
+    printf("#shell$ ");
 }
 
 /**
@@ -113,14 +113,14 @@ int main(void)
 {
     char *line = NULL;
     size_t len = 0;
-    char *command_list[MAX_ARGS]; /* Moved declaration to the top */
+    char *command_list[MAX_ARGS];
 
     while (1)
     {
-        print_prompt();  /* Prompt should be printed here */
+        print_prompt();  /* Prompt printed here */
         if (getline(&line, &len, stdin) == -1)
         {
-            if (feof(stdin))  /* Remove feof() since it's not allowed */
+            if (feof(stdin))
             {
                 free(line);
                 exit(EXIT_SUCCESS);
@@ -132,11 +132,17 @@ int main(void)
                 exit(EXIT_FAILURE);
             }
         }
+
+        /* Handle empty input (e.g., pressing enter without typing a command) */
+        if (line[0] == '\n')
+        {
+            continue;
+        }
+
         command_list[0] = line; /* Single command per line */
         command_list[1] = NULL;
 
         handle_commands(command_list);
-        /* Ensure the prompt is not printed again after executing the command */
     }
 
     free(line);
