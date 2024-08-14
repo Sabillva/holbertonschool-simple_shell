@@ -1,38 +1,25 @@
 #include "shell.h"
-/**
- * execute_command - Executes a given command
- * @args: Array of arguments for the command
- * @full_path: Full path of the command
- */
-void execute_command(char **args, char *full_path)
-{
-	pid_t pid;
-	int status;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Fork Failed");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		if (execve(full_path, args, environ) == -1)
-		{
-			free(full_path);
-			fprintf(stderr, "./simple_shell: %s: command not found\n", args[0]);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		if (waitpid(pid, &status, 0) == -1)
-		{
-			free(full_path);
-			perror("Wait failed");
-			exit(EXIT_FAILURE);
-		}
-	}
+/**
+ * print_prompt - Prints the shell prompt
+ */
+void print_prompt(void)
+{
+    printf("#cisfun$ ");
+}
+
+/**
+ * print_env - Prints the environment variables
+ */
+void print_env(void)
+{
+    char **env_ptr = environ;
+
+    while (*env_ptr != NULL)
+    {
+        printf("%s\n", *env_ptr);
+        env_ptr++;
+    }
 }
 
 /**
@@ -42,63 +29,116 @@ void execute_command(char **args, char *full_path)
  */
 void parse_command(char *input, char **args)
 {
-	char *token = strtok(input, "\t");
-	int i = 0;
+    char *token = strtok(input, " \t\n");
+    int i = 0;
 
-	while (token != NULL && i < MAX_ARGS - 1)
-	{
-		args[i] = token;
-		i++;
-		token = strtok(NULL, " \t");
-	}
-	args[i] = NULL;
+    while (token != NULL && i < MAX_ARGS - 1)
+    {
+        args[i] = token;
+        i++;
+        token = strtok(NULL, " \t\n");
+    }
+    args[i] = NULL;
 }
 
 /**
- * process_input - Processes the raw input from the user
- * @input: Raw input string containing commands
- * @command_list: Array to store each individual command
+ * execute_command - Executes a given command
+ * @args: Array of arguments for the command
  */
-void process_input(char *input, char **command_list)
+void execute_command(char **args)
 {
-	char *command;
-	int i = 0;
+    pid_t pid;
+    int status;
 
-	command = strtok(input, "\n");
-	while (command != NULL)
-	{
-		command_list[i] = command;
-		command = strtok(NULL, "\n");
-		i++;
-	}
-	command_list[i] = NULL;
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("Fork failed");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        if (execve(args[0], args, environ) == -1)
+        {
+            fprintf(stderr, "./simple_shell: %s: command not found\n", args[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        if (waitpid(pid, &status, 0) == -1)
+        {
+            perror("Wait failed");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 /**
  * handle_commands - Handles the list of commands
  * @command_list: Array of command strings
  */
-
 void handle_commands(char **command_list)
 {
-	int i = 0;
-	char *command;
+    int i = 0;
 
-	while (command_list[i] != NULL)
-	{
-		command = command_list[i];
-		if (strcmp(command, "exit") == 0)
-		{
-			exit(EXIT_SUCCESS);
-		}
-		else if (strcmp(command, "env") == 0)
-		{
-			print_env();
-		}
-		else
-		{
-			execute_command(command(command_list[i]);
-		}
-		i++;
-	}
+    while (command_list[i] != NULL)
+    {
+        if (strcmp(command_list[i], "exit") == 0)
+        {
+            exit(EXIT_SUCCESS);
+        }
+        else if (strcmp(command_list[i], "env") == 0)
+        {
+            print_env();
+        }
+        else
+        {
+            char *args[MAX_ARGS];
+            parse_command(command_list[i], args);
+            if (args[0] != NULL)
+            {
+                execute_command(args);
+            }
+        }
+        i++;
+    }
 }
+
+/**
+ * main - Entry point of the shell program
+ * Return: Always 0
+ */
+int main(void)
+{
+    char *line = NULL;
+    size_t len = 0;
+    char *command_list[MAX_ARGS]; /* Moved declaration to the top */
+
+    while (1)
+    {
+        print_prompt();
+        if (getline(&line, &len, stdin) == -1)
+        {
+            if (feof(stdin))
+            {
+                free(line);
+                exit(EXIT_SUCCESS);
+            }
+            else
+            {
+                perror("getline");
+                free(line);
+                exit(EXIT_FAILURE);
+            }
+        }
+        command_list[0] = line; /* Single command per line */
+        command_list[1] = NULL;
+
+        handle_commands(command_list);
+    }
+
+    free(line);
+    return 0;
+}
+

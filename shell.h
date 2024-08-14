@@ -10,9 +10,13 @@
 #include <sys/stat.h>
 
 #define MAX_ARGS 1024
+extern char **environ;
+
 void print_prompt(void);
-void parse_line(char *line, char **args);
-int handle_builtins(char **args);
+void parse_command(char *input, char **args);
 void execute_command(char **args);
-char *get_full_path(char *command);
-#endif /* SHELL_H */       
+void handle_commands(char **command_list);
+void print_env(void);
+
+#endif /* SHELL_H */
+
