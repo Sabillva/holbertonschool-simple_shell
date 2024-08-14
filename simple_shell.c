@@ -1,37 +1,24 @@
 #include "shell.h"
 
 /**
- * print_prompt - Prints the shell prompt
+ * print_prompt - Prints the shell prompt to the user.
  */
 void print_prompt(void)
 {
-    printf("#shell$ ");
+    printf("#cisfun$ ");
 }
 
 /**
- * print_env - Prints the environment variables
- */
-void print_env(void)
-{
-    char **env_ptr = environ;
-
-    while (*env_ptr != NULL)
-    {
-        printf("%s\n", *env_ptr);
-        env_ptr++;
-    }
-}
-
-/**
- * parse_command - Parses the user input into a command and its arguments
- * @input: The input string from the user
- * @args: Array to store the parsed command and arguments
+ * parse_command - Parses the user input into a command and its arguments.
+ * @input: The input string from the user.
+ * @args: Array to store the parsed command and arguments.
  */
 void parse_command(char *input, char **args)
 {
-    char *token = strtok(input, " \t\n");
+    char *token;
     int i = 0;
 
+    token = strtok(input, " \t\n");
     while (token != NULL && i < MAX_ARGS - 1)
     {
         args[i] = token;
@@ -42,8 +29,8 @@ void parse_command(char *input, char **args)
 }
 
 /**
- * execute_command - Executes a given command
- * @args: Array of arguments for the command
+ * execute_command - Executes a given command.
+ * @args: Array of arguments for the command.
  */
 void execute_command(char **args)
 {
@@ -53,30 +40,30 @@ void execute_command(char **args)
     pid = fork();
     if (pid == -1)
     {
-        perror("Fork failed");
+        perror("fork failed");
         exit(EXIT_FAILURE);
     }
     else if (pid == 0)
     {
         if (execve(args[0], args, environ) == -1)
         {
-            fprintf(stderr, "./simple_shell: %s: command not found\n", args[0]);
+            perror(args[0]);
             exit(EXIT_FAILURE);
         }
     }
     else
     {
-        if (waitpid(pid, &status, 0) == -1)
+        if (wait(&status) == -1)
         {
-            perror("Wait failed");
+            perror("wait failed");
             exit(EXIT_FAILURE);
         }
     }
 }
 
 /**
- * handle_commands - Handles the list of commands
- * @command_list: Array of command strings
+ * handle_commands - Handles the list of commands.
+ * @command_list: Array of command strings.
  */
 void handle_commands(char **command_list)
 {
@@ -86,7 +73,7 @@ void handle_commands(char **command_list)
     {
         if (strcmp(command_list[i], "exit") == 0)
         {
-            exit(EXIT_SUCCESS);
+            exit(0);
         }
         else if (strcmp(command_list[i], "env") == 0)
         {
@@ -106,8 +93,22 @@ void handle_commands(char **command_list)
 }
 
 /**
- * main - Entry point of the shell program
- * Return: Always 0
+ * print_env - Prints the environment variables.
+ */
+void print_env(void)
+{
+    char **env_ptr = environ;
+
+    while (*env_ptr != NULL)
+    {
+        printf("%s\n", *env_ptr);
+        env_ptr++;
+    }
+}
+
+/**
+ * main - Entry point of the shell program.
+ * Return: Always returns 0.
  */
 int main(void)
 {
@@ -117,7 +118,7 @@ int main(void)
 
     while (1)
     {
-        print_prompt();  /* Prompt printed here */
+        print_prompt();
         if (getline(&line, &len, stdin) == -1)
         {
             if (feof(stdin))
@@ -133,19 +134,16 @@ int main(void)
             }
         }
 
-        /* Handle empty input (e.g., pressing enter without typing a command) */
         if (line[0] == '\n')
-        {
             continue;
-        }
 
-        command_list[0] = line; /* Single command per line */
+        command_list[0] = line;
         command_list[1] = NULL;
 
         handle_commands(command_list);
     }
 
     free(line);
-    return 0;
+    return (0);
 }
 
