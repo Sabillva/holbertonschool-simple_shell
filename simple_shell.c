@@ -6,7 +6,7 @@
 void print_prompt(void)
 {
     printf("#cisfun$ ");
-    fflush(stdout);  // Ensure the prompt is printed immediately
+    fflush(stdout);  /* Ensure the prompt is printed immediately */
 }
 
 /**
@@ -30,7 +30,7 @@ void run_shell(void)
             if (feof(stdin))
             {
                 free(line);
-                exit(EXIT_SUCCESS);  // Exit gracefully on EOF (Ctrl+D)
+                exit(EXIT_SUCCESS);  /* Exit gracefully on EOF (Ctrl+D) */
             }
             else
             {
@@ -61,7 +61,7 @@ void run_shell(void)
             /* Child process: execute the command */
             char *args[2];
 
-            args[0] = line;  // Command only, no arguments
+            args[0] = line;  /* Command only, no arguments */
             args[1] = NULL;
 
             if (execve(args[0], args, environ) == -1)
