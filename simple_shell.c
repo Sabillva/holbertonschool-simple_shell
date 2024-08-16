@@ -18,15 +18,17 @@ char *trim_whitespace(char *str)
 {
     char *end;
 
-    /* Trim leading space */
-    while (isspace((unsigned char)*str)) str++;
+    /* Trim leading space manually */
+    while (*str == ' ' || *str == '\t' || *str == '\n')
+        str++;
 
     if (*str == '\0')  /* All spaces? */
         return str;
 
-    /* Trim trailing space */
+    /* Trim trailing space manually */
     end = str + strlen(str) - 1;
-    while (end > str && isspace((unsigned char)*end)) end--;
+    while (end > str && (*end == ' ' || *end == '\t' || *end == '\n'))
+        end--;
 
     /* Write new null terminator */
     *(end + 1) = '\0';
@@ -52,17 +54,8 @@ void run_shell(void)
         read_size = getline(&line, &len, stdin);
         if (read_size == -1)
         {
-            if (feof(stdin))
-            {
-                free(line);
-                exit(EXIT_SUCCESS);  /* Exit gracefully on EOF (Ctrl+D) */
-            }
-            else
-            {
-                perror("getline");
-                free(line);
-                exit(EXIT_FAILURE);
-            }
+            free(line);
+            exit(EXIT_SUCCESS);  /* Exit gracefully on EOF (Ctrl+D) */
         }
 
         /* Trim whitespace and handle empty input */
