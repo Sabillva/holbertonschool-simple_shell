@@ -10,6 +10,31 @@ void print_prompt(void)
 }
 
 /**
+ * trim_whitespace - Removes leading and trailing whitespace from a string.
+ * @str: The string to trim.
+ * Return: Pointer to the trimmed string.
+ */
+char *trim_whitespace(char *str)
+{
+    char *end;
+
+    /* Trim leading space */
+    while (isspace((unsigned char)*str)) str++;
+
+    if (*str == '\0')  /* All spaces? */
+        return str;
+
+    /* Trim trailing space */
+    end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end)) end--;
+
+    /* Write new null terminator */
+    *(end + 1) = '\0';
+
+    return str;
+}
+
+/**
  * run_shell - Core function to run the simple shell loop.
  */
 void run_shell(void)
@@ -40,9 +65,8 @@ void run_shell(void)
             }
         }
 
-        /* Remove trailing newline character */
-        if (line[read_size - 1] == '\n')
-            line[read_size - 1] = '\0';
+        /* Trim whitespace and handle empty input */
+        line = trim_whitespace(line);
 
         /* Ignore empty input */
         if (line[0] == '\0')
