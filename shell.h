@@ -7,16 +7,12 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <sys/stat.h>
+#include <errno.h>
 
-#define MAX_ARGS 1024
 extern char **environ;
 
 void print_prompt(void);
-void parse_command(char *input, char **args);
-void execute_command(char **args);
-void handle_commands(char **command_list);
-void print_env(void);
+void run_shell(void);
 
 #endif /* SHELL_H */
 
