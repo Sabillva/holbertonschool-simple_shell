@@ -6,9 +6,9 @@ simple_shell \- a simple UNIX command line interpreter
 .SH SYNOPSIS
 .B simple_shell
 .SH DESCRIPTION
-The 
+The
 .B simple_shell
-is a basic UNIX command line interpreter. It provides a prompt for the user to enter commands and executes them. 
+is a basic UNIX command line interpreter. It provides a prompt for the user to enter commands and executes them.
 
 It supports the following features:
 .TP
@@ -17,6 +17,7 @@ Displays a prompt and waits for the user to enter a command. After executing the
 .TP
 .B Non-Interactive Mode
 Reads commands from standard input (e.g., a pipe) and executes them.
+
 .SH COMMANDS
 The shell handles commands in the following way:
 .TP
@@ -25,17 +26,22 @@ Lists directory contents.
 .TP
 .B /bin/ls
 Executes the /bin/ls command directly.
+
 .SH BUILT-INS
+The following built-in commands are supported:
 .TP
 .B exit
 Exits the shell.
 .TP
 .B env
-Prints the current environment.
+Prints the current environment variables.
+
 .SH OPTIONS
 This shell does not support any additional options or arguments. Commands must be entered directly without arguments.
+
 .SH EXIT STATUS
-The shell exits with status code 0 if the command was successful, and 1 if an error occurred.
+The shell exits with status code 0 if the command was successful, and a non-zero value if an error occurred.
+
 .SH EXAMPLES
 .TP
 .B $ ./simple_shell
@@ -46,10 +52,13 @@ Lists the files in the current directory.
 .TP
 .B $ exit
 Exits the shell.
+
 .SH AUTHOR
-Written by <Sabillva> <sadatnazarli>.
+Written by Sabillva and Sadatnazarli.
+
 .SH REPORTING BUGS
 Report bugs to <https://github.com/Sabillva> <https://github.com/sadatnazarli>.
+
 .SH COPYRIGHT
-Copyright (C) 2024 <Sabina> <Sadat>. License: MIT.
+Copyright (C) 2024 Sabillva, Sadatnazarli. Licensed under the MIT License.
 
