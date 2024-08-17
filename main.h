@@ -20,6 +20,6 @@ void execute(char **arr, char *path, int *status, char *tmp);
 char **split(char *input);
 void free_arr(char **arr);
 void print_env(void);
-char *get_path(char *arr, char *command);
+char *get_path(char **arr, char *command);
 
 #endif
