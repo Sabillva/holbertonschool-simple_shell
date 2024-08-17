@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
  * get_path - gets the path of a command
  * @arr: array of commands
