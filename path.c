@@ -7,6 +7,7 @@
  * Return: returns the path of the command
 */
 
+
 char *get_path(char **arr, char *command)
 {
 	struct  stat st;
