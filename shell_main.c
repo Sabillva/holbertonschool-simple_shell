@@ -1,8 +1,10 @@
 #include "main.h"
+
 /**
  * main - main function of the shell
  * Return: returns 0 on success
  */
+
 int main(void)
 {
 	char *command, *tmp = NULL;
@@ -42,12 +44,14 @@ int main(void)
 	}
 	return (status);
 }
+
 /**
  * exit_and_env - handle exit and env function
  * @command: command
  * @status: status
  * Return: true if command is env false otherwise
  */
+
 bool exit_and_env(char *command, int *status)
 {
 	if (strcmp(command, "env") == 0)
