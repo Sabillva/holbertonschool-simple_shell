@@ -5,6 +5,7 @@
  * @command: string to split
  * Return: returns an array of strings
  */
+
 char **split(char *command)
 {
 	char *token, **tokens;
@@ -33,6 +34,7 @@ char **split(char *command)
  * @status: status
  * Return: void
  */
+
 void pre_execute(char *command, char *tmp, int *status)
 {
 	struct stat st;
