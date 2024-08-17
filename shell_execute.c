@@ -101,6 +101,7 @@ void execute(char **arr, char *path, int *status, char *tmp)
  * @arr: array to free
  * Return: void
  */
+
 void free_arr(char **arr)
 {
 	int i = 0;
