@@ -64,6 +64,7 @@ void pre_execute(char *command, char *tmp, int *status)
  * @tmp: temporary variable for memory management
  * Return: void
 */
+
 void execute(char **arr, char *path, int *status, char *tmp)
 {
 	pid_t pid = fork();
