@@ -13,26 +13,25 @@ void resolve_path(char **args, char **path, char **env_path, int *found)
 
     if (*env_path == NULL)
     {
-        fprintf(stderr, "%s: 1: %s: not found\n", args[0], args[0]);
-        free(*env_path);
-        free(*path);
-        exit(127);
+        *found = 0;
+        return;
     }
-    path_token = strtok(*env_path, ":");
 
+    path_token = strtok(*env_path, ":");
     while (path_token != NULL)
     {
         strcpy(*path, path_token);
         strcat(*path, "/");
         strcat(*path, args[0]);
-        if (access(*path, X_OK) != -1)
+        if (access(*path, X_OK) == 0)  /* Check if command is executable */
         {
             *found = 1;
-            break;
+            return;
         }
         path_token = strtok(NULL, ":");
     }
-    free(*env_path);
+
+    *found = 0;  /* Command not found in PATH */
 }
 
 /**
@@ -55,14 +54,14 @@ void execute_input_cmd(char *input_command, char *shell_name)
         return;
     }
 
-    if (strchr(args[0], '/') != NULL)
+    if (strchr(args[0], '/') != NULL)  /* Check if command is a path (e.g., "./hbtn_ls") */
     {
         if (access(args[0], X_OK) == -1)
         {
             fprintf(stderr, "%s: 1: %s: not found\n", shell_name, args[0]);
             free(path);
             free(env_path);
-            exit(127);
+            return;
         }
         free(path);
         free(env_path);
@@ -70,15 +69,18 @@ void execute_input_cmd(char *input_command, char *shell_name)
         found = 1;
     }
     else
+    {
         resolve_path(args, &path, &env_path, &found);
+    }
 
-    if (found == 0)
+    if (found == 0)  /* Command not found, do not fork */
     {
         fprintf(stderr, "%s: 1: %s: not found\n", shell_name, args[0]);
         free(path);
-        exit(127);
+        return;
     }
 
+    /* Only fork when we have a valid command to execute */
     execute_cmd(args, path, shell_name);
     free(path);
 }
