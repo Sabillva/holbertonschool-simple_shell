@@ -16,13 +16,13 @@
 #define ENV_PATH "PATH="
 extern char **environ;
 
-void execute_cmd(char **args, char *path);
+void execute_cmd(char **args, char *path, char *shell_name);
 void split_command(char *input_command, char **args);
 void resolve_path(char **args, char **path, char **env_path, int *found);
-void execute_input_cmd(char *input_command);
+void execute_input_cmd(char *input_command, char *shell_name);
 void initialize_shell_env(char **env_path, char **path);
 void parse_command_input(char *commands, char **commands_list);
-void process_cmd_list(char **commands_list);
+void process_cmd_list(char **commands_list, char *shell_name);
 void display_shell_env(void);
 
 #endif /* SHELL_UTILITIES_H */

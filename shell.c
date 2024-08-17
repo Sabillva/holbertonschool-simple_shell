@@ -4,8 +4,9 @@
  * execute_cmd - Function to execute command
  * @args: command arguments
  * @path: path to executable
+ * @shell_name: name of the shell program
  */
-void execute_cmd(char **args, char *path)
+void execute_cmd(char **args, char *path, char *shell_name)
 {
     pid_t pid;
     int status;
@@ -21,7 +22,7 @@ void execute_cmd(char **args, char *path)
         if (execve(path, args, environ) == -1)
         {
             free(path);
-            fprintf(stderr, "./my_shell: 1: %s: not found\n", args[0]);
+            fprintf(stderr, "%s: 1: %s: not found\n", shell_name, args[0]);
             exit(EXIT_FAILURE);
         }
     }
@@ -79,8 +80,9 @@ void parse_command_input(char *commands, char **commands_list)
 /**
  * process_cmd_list - Process array of commands
  * @commands_list: list of commands to process
+ * @shell_name: name of the shell program
  */
-void process_cmd_list(char **commands_list)
+void process_cmd_list(char **commands_list, char *shell_name)
 {
     int a = 0;
     char *command;
@@ -95,16 +97,18 @@ void process_cmd_list(char **commands_list)
             command = commands_list[a];
             if (strcmp(command, "exit") == 0 && a > 0)
                 exit(2);
-            execute_input_cmd(command);
+            execute_input_cmd(command, shell_name);
             a++;
         }
 }
 
 /**
  * main - Entry point for the shell
+ * @argc: Argument count
+ * @argv: Argument vector
  * Return: Always 0
  */
-int main(void)
+int main(__attribute__((unused)) int argc, char **argv)
 {
     char commands[MAX_LENGTH];
     char *commands_list[MAX_LENGTH];
@@ -112,6 +116,7 @@ int main(void)
 
     while (1)
     {
+        write(STDOUT_FILENO, SHELL_PROMPT, strlen(SHELL_PROMPT));
         read_size = read(STDIN_FILENO, commands, MAX_LENGTH);
         if (read_size == -1)
         {
@@ -123,7 +128,7 @@ int main(void)
         commands[read_size] = '\0';
 
         parse_command_input(commands, commands_list);
-        process_cmd_list(commands_list);
+        process_cmd_list(commands_list, argv[0]);
     }
     return (0);
 }

@@ -13,7 +13,7 @@ void resolve_path(char **args, char **path, char **env_path, int *found)
 
     if (*env_path == NULL)
     {
-        fprintf(stderr, "./my_shell: 1: %s: not found\n", args[0]);
+        fprintf(stderr, "%s: 1: %s: not found\n", args[0], args[0]);
         free(*env_path);
         free(*path);
         exit(127);
@@ -38,8 +38,9 @@ void resolve_path(char **args, char **path, char **env_path, int *found)
 /**
  * execute_input_cmd - Execute command based on input
  * @input_command: user input command
+ * @shell_name: name of the shell program
  */
-void execute_input_cmd(char *input_command)
+void execute_input_cmd(char *input_command, char *shell_name)
 {
     char *args[MAX_LENGTH], *path = NULL, *env_path = NULL;
     int found = 0;
@@ -58,7 +59,7 @@ void execute_input_cmd(char *input_command)
     {
         if (access(args[0], X_OK) == -1)
         {
-            fprintf(stderr, "./my_shell: 1: %s: not found\n", args[0]);
+            fprintf(stderr, "%s: 1: %s: not found\n", shell_name, args[0]);
             free(path);
             free(env_path);
             exit(127);
@@ -73,12 +74,12 @@ void execute_input_cmd(char *input_command)
 
     if (found == 0)
     {
-        fprintf(stderr, "./my_shell: 1: %s: not found\n", args[0]);
+        fprintf(stderr, "%s: 1: %s: not found\n", shell_name, args[0]);
         free(path);
         exit(127);
     }
 
-    execute_cmd(args, path);
+    execute_cmd(args, path, shell_name);
     free(path);
 }
 
