@@ -45,6 +45,7 @@ int main(void)
 	return (status);
 }
 
+
 /**
  * exit_and_env - handle exit and env function
  * @command: command
