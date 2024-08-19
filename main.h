@@ -1,23 +1,29 @@
-#ifndef MAIN_H
-#define MAIN_H
-
-#define MAX_ARGS 1024
+#ifndef MAINH
+#define MAINH
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
+#include <dirent.h>
 
+#define MAX_LEN 100
+#define PROMPT ">> "
+#define PATH "PATH="
 extern char **environ;
 
-char **get_argument(char *line);
-char *get_path(char *line);
-void free_args(char **array_command);
-void execute_command(char **array_command, int nbr_command);
-char *_getenv(const char *name);
+void handle_command(char *u_command);
+void print_env(void);
+void setup_environment(char **path_env, char **path);
+void execute_command(char **args, char *path);
+void parse_command(char *u_command, char **args);
+void handle_path(char **args, char **path, char **path_env, int *found);
+void process_commands(char *commands, char **commands_array);
+void handle_commands_array(char **commands_array);
 
-#endif /* MAIN_H */
+#endif /* MAINH */
 
