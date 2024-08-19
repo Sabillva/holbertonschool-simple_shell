@@ -1,13 +1,23 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define MAX_ARGS 1024
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
 extern char **environ;
 
-#endif
+char **get_argument(char *line);
+char *get_path(char *line);
+void free_args(char **array_command);
+void execute_command(char **array_command, int nbr_command);
+char *_getenv(const char *name);
+
+#endif /* MAIN_H */
+
