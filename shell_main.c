@@ -1,49 +1,116 @@
 #include "main.h"
 
 /**
- * main - main function of the shell
- * Return: returns 0 on success
+ * findpath - find the path directory of the function
+ * @argument0: argument to search
+ * @newpath: buffer to the route of the path
+ * Return: 0 if it finds, 1 if not.
  */
+int findpath(char *argument0, char *newpath)
+{
+	char *path = getenv("PATH");
+	char *token = strtok(path, ":");
 
+	while (token != NULL)
+	{
+		snprintf(newpath, 50, "%s/%s", token, argument0);
+		if (access(newpath, X_OK) == 0)
+		{
+			return (0);
+		}
+		token = strtok(NULL, ":");
+	}
+	return (1);
+}
+
+/**
+ * checkcommand - function to check the command that the user gives.
+ * @line: buffer that has the command
+ * Return: void.
+ */
+void checkcommand(char *line)
+{
+	pid_t child_pid;
+	int i, status;
+	char *args[10];
+
+	child_pid = fork();
+	if (child_pid == -1)
+	{
+		perror("Fork failed");
+		exit(1);
+	}
+	else if (child_pid == 0)
+	{
+		i = 0;
+		args[i] = strtok(line, " ");
+		while (args[i] != NULL)
+		{
+			i++;
+			args[i] = strtok(NULL, " ");
+		}
+		args[i] = NULL;
+		if (args[0] && !strchr(args[0], '/'))
+		{
+			char newpath[50];
+
+			if (findpath(args[0], newpath) == 0)
+				args[0] = newpath;
+		}
+		execve(args[0], args, environ);
+		perror("./shell");
+		exit(1);
+	}
+	else
+	{
+		wait(&status);
+	}
+}
+
+/**
+ * main - main function.
+ *
+ * Return: Always 0.
+ */
 int main(void)
 {
-    char *command = NULL;
-    size_t size = 0;
-    char *tmp = NULL;
-    int status = 0;
-    ssize_t read;
+	char *line = NULL, **env = environ;
+	size_t line_len = 0;
+	ssize_t line_read;
+	int i;
 
-    while (1)
-    {
-        printf("$ ");
-        read = getline(&command, &size, stdin);
-        if (read == -1)
-        {
-            free(command);
-            exit(EXIT_FAILURE);
-        }
-        pre_execute(command, tmp, &status);
-    }
-    return (0);
+	while (1)
+	{
+		if (isatty(fileno(stdin)))
+			printf("#cisfun$ ");
+		line_read = getline(&line, &line_len, stdin);
+		if (line_read == -1)
+		{
+			free(line);
+			exit(0);
+		}
+		line[strcspn(line, "\n")] = '\0';
+		for (i = 0; line[i] != '\0'; i++)
+		{
+			if (line[i] != ' ')
+				break;
+		}
+		if (line[i] == '\0')
+			continue;
+		if (strcmp(line, "exit") == 0)
+			break;
+		else if (strcmp(line, "env") == 0)
+		{
+			while (*env != NULL)
+			{
+				printf("%s\n", *env);
+				env++;
+			}
+		}
+		else
+			checkcommand(line);
+	}
+	free(line);
+	return (0);
 }
-/**
- * exit_and_env - handle exit and env function
- * @command: command
- * @status: status
- * Return: true if command is env or exit, false otherwise
- */
 
-bool exit_and_env(char *command, int *status)
-{
-    if (strcmp(command, "env") == 0)
-    {
-        *status = 0;
-        print_env();
-        return true;
-    }
-    if (strcmp(command, "exit") == 0)
-    {
-        exit(*status);
-    }
-    return false;
-}
