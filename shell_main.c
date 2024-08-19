@@ -7,64 +7,43 @@
 
 int main(void)
 {
-	char *command, *tmp = NULL;
-	int read, status = 0;
-	size_t size;
+    char *command = NULL;
+    size_t size = 0;
+    char *tmp = NULL;
+    int status = 0;
+    ssize_t read;
 
-	while (1)
-	{
-		command = NULL;
-		if (isatty(STDIN_FILENO))
-			printf("$ ");
-		fflush(stdout);
-		read = getline(&command, &size, stdin);
-		if (read == -1)
-		{
-			free(command);
-			break;
-		}
-		command[read - 1] = '\0';
-		tmp = command;
-		if (command == NULL)
-		{
-			free(tmp);
-			break;
-		}
-		while (command[0] == ' ' || command[0] == '\t')
-			command++;
-
-		if (command[0] == '\n' || command[0] == '\0')
-		{
-			free(tmp);
-			continue;
-		}
-		if (exit_and_env(command, &status))
-			continue;
-		pre_execute(command, tmp, &status);
-	}
-	return (status);
+    while (1)
+    {
+        printf("$ ");
+        read = getline(&command, &size, stdin);
+        if (read == -1)
+        {
+            free(command);
+            exit(EXIT_FAILURE);
+        }
+        pre_execute(command, tmp, &status);
+    }
+    return (0);
 }
-
 /**
  * exit_and_env - handle exit and env function
  * @command: command
  * @status: status
- * Return: true if command is env false otherwise
+ * Return: true if command is env or exit, false otherwise
  */
 
 bool exit_and_env(char *command, int *status)
 {
-	if (strcmp(command, "env") == 0)
-	{
-		*status = 0;
-		print_env();
-		free(command);
-		return (true);
-	}
-	if (strcmp(command, "exit") == 0)
-	{
-		free(command);
-		exit(*status);
-	}
-	return (false);
+    if (strcmp(command, "env") == 0)
+    {
+        *status = 0;
+        print_env();
+        return true;
+    }
+    if (strcmp(command, "exit") == 0)
+    {
+        exit(*status);
+    }
+    return false;
 }
